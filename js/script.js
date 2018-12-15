@@ -3,6 +3,7 @@ Treehouse Techdegree:
 FSJS project 2 - List Filter and Pagination
 ******************************************/
 
+const parent = document.getElementsByClassName('page')[0];
 const students = document.getElementsByClassName('student-item');
 
 // build an array of arrays, with each child array having ten or less elements
@@ -41,8 +42,6 @@ function showPage(list) {
 // creates page links and adds a click event listener for each
 function appendPageLinks(array) {
     const num = array.length;
-    // get parent div
-    const parent = document.getElementsByClassName('page')[0];
     // clear existing div it if exists
     const oldDiv = document.getElementsByClassName('pagination')[0];
     if (oldDiv) {
@@ -100,6 +99,33 @@ function createSearchBox() {
     return(searchDiv);
 }
 
+// add a not found message and hide elements
+function notFound() {
+    clearNotFound();
+    const sibling = document.getElementsByClassName('student-list')[0];
+    const message = document.createElement('h3');
+    message.id = 'not-found';
+    message.textContent = 'No students found';
+    parent.insertBefore(message, sibling);
+    // hide elements
+    for (let i = 0; i < students.length; i++) {
+        students[i].style.display = 'none';
+    }
+    const paginationDiv = document.getElementsByClassName('pagination')[0];
+    if (paginationDiv) {
+        parent.removeChild(paginationDiv);
+    }
+}
+
+// clear not found message
+function clearNotFound() {
+    // clear existing message if exists
+    const message = document.getElementById('not-found');
+    if (message) {
+        parent.removeChild(message);
+    }
+}
+
 // show the initial page
 exec(students);
 
@@ -109,6 +135,7 @@ const searchInput = searchDiv.firstElementChild;
 
 // listen for change on search input and filter results
 searchInput.addEventListener('input', () => {
+    clearNotFound();
     let value = searchInput.value.toUpperCase();
     let list = [];
     if (value.length > 0) {
@@ -118,7 +145,11 @@ searchInput.addEventListener('input', () => {
                 list.push(students[i]);
             }
         }
-        exec(list);
+        if (list.length > 0) {
+            exec(list);
+        } else {
+            notFound();
+        }
     } else {
         exec(students);
     }
