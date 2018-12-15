@@ -38,10 +38,17 @@ function showPage(list) {
     }
 }
 
-// creates as many page links as the number passed
-function appendPageLinks(num) {
+// creates page links and adds a click event listener for each
+function appendPageLinks(array) {
+    const num = array.length;
     // get parent div
     const parent = document.getElementsByClassName('page')[0];
+    // clear existing div it if exists
+    const oldDiv = document.getElementsByClassName('pagination')[0];
+    if (oldDiv) {
+        parent.removeChild(oldDiv);
+    }
+    // create new elements
     const div = document.createElement('div');
     div.className = 'pagination';
     const ul = document.createElement('ul');
@@ -56,36 +63,63 @@ function appendPageLinks(num) {
         ul.appendChild(li);
     }
     ul.children[0].children[0].className = 'active';
+    // set an event listener for each page link
+    for (let i = 0; i < ul.children.length; i++) {
+        const a = ul.children[i].children[0];
+        a.addEventListener('click', () => {
+            // move active class to the appropriate link
+            const old = document.getElementsByClassName('active')[0];
+            old.className = '';
+            a.className = 'active';
+            // display the new results
+            showPage(array[i]);
+        })
+    }
     return(ul);
 }
 
-// show the initial page
-const array = arrayOfArrays(students);
-showPage(array[0]);
-// add page links to bottom of page
-const ul = appendPageLinks(array.length);
-
-// set an event listener for each page link
-for (let i = 0; i < ul.children.length; i++) {
-    const a = ul.children[i].children[0];
-    a.addEventListener('click', () => {
-        // move active class to the appropriate link
-        const old = document.getElementsByClassName('active')[0];
-        old.className = '';
-        a.className = 'active';
-        // display the new results
-        showPage(array[i]);
-    })
+// wrapper to execute functions
+function exec(list) {
+    const array = arrayOfArrays(list);
+    showPage(array[0]);
+    appendPageLinks(array);
 }
 
+// function to add search box
+function createSearchBox() {
+    const header = document.getElementsByClassName('page-header')[0];
+    const searchDiv = document.createElement('div');
+    searchDiv.className = 'student-search';
+    const input = document.createElement('input');
+    input.placeholder = 'Search for students...';
+    searchDiv.appendChild(input);
+    const button = document.createElement('button');
+    button.textContent = 'Search';
+    searchDiv.appendChild(button);
+    header.appendChild(searchDiv);
+    return(searchDiv);
+}
+
+// show the initial page
+exec(students);
+
 // add search feature structure
-const header = document.getElementsByClassName('page-header')[0];
-const searchDiv = document.createElement('div');
-searchDiv.className = 'student-search';
-const input = document.createElement('input');
-input.placeholder = 'Search for students...';
-searchDiv.appendChild(input);
-const button = document.createElement('button');
-button.textContent = 'Search';
-searchDiv.appendChild(button);
-header.appendChild(searchDiv);
+const searchDiv = createSearchBox();
+const searchInput = searchDiv.firstElementChild;
+
+// listen for change on search input and filter results
+searchInput.addEventListener('input', () => {
+    let value = searchInput.value.toUpperCase();
+    let list = [];
+    if (value.length > 0) {
+        for (let i = 0; i < students.length; i++) {
+            const studentName = students[i].firstElementChild.children[1].textContent.toUpperCase();
+            if (studentName.indexOf(value) > -1) {
+                list.push(students[i]);
+            }
+        }
+        exec(list);
+    } else {
+        exec(students);
+    }
+})
