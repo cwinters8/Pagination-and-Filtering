@@ -52,10 +52,14 @@ function arrayOfArrays(students) {
        that will be passed into the parens later when you call or 
        "invoke" the function 
 ***/
-function showPage() {
-
+// takes in a list of students that should be displayed
+function showPage(list) {
+    for (let i = 0; i < students.length; i++) {
+        if (!list.includes(students[i])) {
+            students[i].style.display = 'none';
+        }
+    }
 }
-
 
 /*** 
    Create the `appendPageLinks function` to generate, append, and add 
@@ -78,8 +82,13 @@ function appendPageLinks(num) {
         li.appendChild(a);
         ul.appendChild(li);
     }
-    return(div);
+    ul.children[0].children[0].className = 'active';
+    return(ul);
 }
 
 // Remember to delete the comments that came with this file, and replace them with your own code comments.
+const array = arrayOfArrays(students);
+showPage(array[0]);
+// add page links to bottom of page
+appendPageLinks(array.length);
 
