@@ -2,20 +2,7 @@
 Treehouse Techdegree:
 FSJS project 2 - List Filter and Pagination
 ******************************************/
-   
-// Study guide for this project - https://drive.google.com/file/d/1OD1diUsTMdpfMDv677TfL1xO2CEkykSz/view?usp=sharing
 
-
-/*** 
-   Add your global variables that store the DOM elements you will 
-   need to reference and/or manipulate. 
-   
-   But be mindful of which variables should be global and which 
-   should be locally scoped to one of the two main functions you're 
-   going to create. A good general rule of thumb is if the variable 
-   will only be used inside of a function, then it can be locally 
-   scoped to that function.
-***/
 const students = document.getElementsByClassName('student-item');
 
 // build an array of arrays, with each child array having ten or less elements
@@ -43,7 +30,6 @@ function showPage(list) {
     for (let i = 0; i < students.length; i++) {
         students[i].style.display = '';
     }
-
     // hide the appropriate students
     for (let i = 0; i < students.length; i++) {
         if (!list.includes(students[i])) {
@@ -79,7 +65,7 @@ showPage(array[0]);
 // add page links to bottom of page
 const ul = appendPageLinks(array.length);
 
-// set an event listener for each button
+// set an event listener for each page link
 for (let i = 0; i < ul.children.length; i++) {
     const a = ul.children[i].children[0];
     a.addEventListener('click', () => {
@@ -91,3 +77,15 @@ for (let i = 0; i < ul.children.length; i++) {
         showPage(array[i]);
     })
 }
+
+// add search feature structure
+const header = document.getElementsByClassName('page-header')[0];
+const searchDiv = document.createElement('div');
+searchDiv.className = 'student-search';
+const input = document.createElement('input');
+input.placeholder = 'Search for students...';
+searchDiv.appendChild(input);
+const button = document.createElement('button');
+button.textContent = 'Search';
+searchDiv.appendChild(button);
+header.appendChild(searchDiv);
