@@ -18,7 +18,6 @@ FSJS project 2 - List Filter and Pagination
 ***/
 const students = document.getElementsByClassName('student-item');
 
-
 // build an array of arrays, with each child array having ten or less elements
 function arrayOfArrays(students) {
     const tens = Math.ceil(students.length / 10);
@@ -38,22 +37,14 @@ function arrayOfArrays(students) {
     return(parentArray);
 }
 
-/*** 
-   Create the `showPage` function to hide all of the items in the 
-   list except for the ten you want to show.
-
-   Pro Tips: 
-     - Keep in mind that with a list of 54 students, the last page 
-       will only display four.
-     - Remember that the first student has an index of 0.
-     - Remember that a function `parameter` goes in the parens when 
-       you initially define the function, and it acts as a variable 
-       or a placeholder to represent the actual function `argument` 
-       that will be passed into the parens later when you call or 
-       "invoke" the function 
-***/
 // takes in a list of students that should be displayed
 function showPage(list) {
+    // unhide all students
+    for (let i = 0; i < students.length; i++) {
+        students[i].style.display = '';
+    }
+
+    // hide the appropriate students
     for (let i = 0; i < students.length; i++) {
         if (!list.includes(students[i])) {
             students[i].style.display = 'none';
@@ -61,10 +52,6 @@ function showPage(list) {
     }
 }
 
-/*** 
-   Create the `appendPageLinks function` to generate, append, and add 
-   functionality to the pagination buttons.
-***/
 // creates as many page links as the number passed
 function appendPageLinks(num) {
     // get parent div
@@ -86,9 +73,21 @@ function appendPageLinks(num) {
     return(ul);
 }
 
-// Remember to delete the comments that came with this file, and replace them with your own code comments.
+// show the initial page
 const array = arrayOfArrays(students);
 showPage(array[0]);
 // add page links to bottom of page
-appendPageLinks(array.length);
+const ul = appendPageLinks(array.length);
 
+// set an event listener for each button
+for (let i = 0; i < ul.children.length; i++) {
+    const a = ul.children[i].children[0];
+    a.addEventListener('click', () => {
+        // move active class to the appropriate link
+        const old = document.getElementsByClassName('active')[0];
+        old.className = '';
+        a.className = 'active';
+        // display the new results
+        showPage(array[i]);
+    })
+}
