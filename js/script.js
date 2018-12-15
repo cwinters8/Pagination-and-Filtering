@@ -18,6 +18,26 @@ FSJS project 2 - List Filter and Pagination
 ***/
 const students = document.getElementsByClassName('student-item');
 
+
+// build an array of arrays, with each child array having ten or less elements
+function arrayOfArrays(students) {
+    const tens = Math.ceil(students.length / 10);
+    let parentArray = [];
+    let bottom = 0;
+    for (let i = 1; i <= tens; i++) {
+        const top = i * 10;
+        let childArray = [];
+        for (let j = bottom; j < top; j++) {
+            if (j < students.length) {
+                childArray.push(students[j]);
+            }
+        }
+        bottom = bottom + 10;
+        parentArray.push(childArray);
+    }
+    return(parentArray);
+}
+
 /*** 
    Create the `showPage` function to hide all of the items in the 
    list except for the ten you want to show.
@@ -62,24 +82,4 @@ function appendPageLinks(num) {
 }
 
 // Remember to delete the comments that came with this file, and replace them with your own code comments.
-
-
-// build an array of arrays, with each child array having ten or less elements
-function arrayOfArrays(students) {
-    const tens = Math.ceil(students.length / 10);
-    let parentArray = [];
-    let bottom = 0;
-    for (let i = 1; i <= tens; i++) {
-        const top = i * 10;
-        let childArray = [];
-        for (let j = bottom; j < top; j++) {
-            if (j < students.length) {
-                childArray.push(students[j]);
-            }
-        }
-        bottom = bottom + 10;
-        parentArray.push(childArray);
-    }
-    return(parentArray);
-}
 
