@@ -7,3 +7,6 @@ Second project in the [Team Treehouse](http://referrals.trhou.se/clarkwinters) F
 JavaScript  
 HTML  
 CSS  
+
+## Credits
+The majority of the HTML and CSS were provided by [Team Treehouse](https://teamtreehouse.com).
